@@ -132,11 +132,14 @@ while running:
     if all_dead:
         max_score_object = max(birds, key=lambda obj: obj.score)
         pipe_speed = 5
+        if run == 0:
+            best_object = max_score_object
         if max_score_object.score > high_score:
             best_run = run
+            best_object = max_score_object
         run += 1
         high_score =  max(high_score, max_score_object.score)
-        birds = reset_simulation(max_score_object)
+        birds = reset_simulation(best_object)
         
     # Display score
     score_text = font.render(f"High Score: {round(high_score, 2)} | Run: {run}", True, WHITE)
