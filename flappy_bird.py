@@ -60,7 +60,7 @@ class Bird:
         self.score = 0
         self.model = model
 
-birds = [Bird(network(3)) for _ in range(350)]
+birds = [Bird(network(4)) for _ in range(350)]
 clock = pygame.time.Clock()
 
 def reset_simulation(obj: Bird):
@@ -105,7 +105,7 @@ while running:
         # if bird.alive:
         #     all_dead = False
 
-        bird_list = [np.float32(bird.velocity), np.float32(bird.x - pipes[0][0].x), np.float32(bird.y - pipes[0][0].height)]
+        bird_list = [np.float32(bird.velocity), np.float32(pipe_speed), np.float32(bird.x - pipes[0][0].x), np.float32(bird.y - pipes[0][0].height)]
         if bird.model(torch.tensor(bird_list)) == 1:
             bird.velocity = bird_jump
         bird.velocity += gravity
