@@ -105,7 +105,7 @@ while running:
         # if bird.alive:
         #     all_dead = False
 
-        bird_list = [np.float32(bird.velocity + pipe_speed), np.float32(bird.x - pipes[0][0].x), np.float32(bird.y - pipes[0][0].height)]
+        bird_list = [np.float32(bird.velocity), np.float32(bird.x - pipes[0][0].x), np.float32(bird.y - pipes[0][0].height)]
         if bird.model(torch.tensor(bird_list)) == 1:
             bird.velocity = bird_jump
         bird.velocity += gravity
