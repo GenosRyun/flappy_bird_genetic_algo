@@ -33,3 +33,11 @@ def mutate_model(model, mutation_strength=0.1):
             param.data += noise  # Add random noise to parameters
     
     return new_model
+
+# model = network(3)
+# new_model = mutate_model(model)
+# for name, param in model.named_parameters():
+#     print(f"Parameter name: {name}, Shape: {param}")
+   
+# for name, param in new_model.named_parameters():
+#     print(f"Parameter name: {name}, Shape: {param}")

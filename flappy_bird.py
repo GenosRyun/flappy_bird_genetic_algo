@@ -21,8 +21,8 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 
 # Game variables
-gravity = 0.5
-bird_jump = -10
+gravity = 1
+bird_jump = -5
 bird_x = 50
 bird_y = HEIGHT // 2
 bird_radius = 15
@@ -60,14 +60,14 @@ class Bird:
         self.score = 0
         self.model = model
 
-birds = [Bird(network(4)) for _ in range(350)]
+birds = [Bird(network(4)) for _ in range(10)]
 clock = pygame.time.Clock()
 
 def reset_simulation(obj: Bird):
     global pipes, birds, elapsed_time
     pipes = [create_pipe()]
     elapsed_time = 0
-    return [Bird(mutate_model(obj.model)) for _ in range(350)]
+    return [obj] + [Bird(mutate_model(obj.model)) for _ in range(9)]
 
 
 # Game loop
@@ -94,7 +94,7 @@ while running:
     # Remove off-screen pipes
     if pipes[0][0].x + pipe_width < 0:
         pipes.pop(0)
-        pipe_speed += 0.1
+        # pipe_speed += 0.1
 
     # all_dead = True
     for bird in birds:
@@ -105,9 +105,20 @@ while running:
         # if bird.alive:
         #     all_dead = False
 
-        bird_list = [np.float32(bird.velocity), np.float32(pipe_speed), np.float32(bird.x - pipes[0][0].x), np.float32(bird.y - pipes[0][0].height)]
+        if np.float32(bird.x - pipes[0][0].x) < 0:
+            try:
+                bird_list = [np.float32(bird.velocity), np.float32(pipe_speed), 
+                        np.float32(bird.x - pipes[1][0].x), np.float32(bird.y - pipes[0][0].height)]
+            except:
+                bird_list = [np.float32(bird.velocity), np.float32(pipe_speed), 
+                        np.float32(bird.x - pipes[0][0].x), np.float32(bird.y - pipes[0][0].height)]
+        else:
+            bird_list = [np.float32(bird.velocity), np.float32(pipe_speed), 
+                        np.float32(bird.x - pipes[0][0].x), np.float32(bird.y - pipes[0][0].height)]
+                    #  np.float32(bird.x - pipes[1][0].x), np.float32(bird.y - pipes[1][0].height)]
         if bird.model(torch.tensor(bird_list)) == 1:
-            bird.velocity = bird_jump
+            bird.velocity = 0
+            bird.y = bird.y - 5
         bird.velocity += gravity
         bird.y += bird.velocity
 
